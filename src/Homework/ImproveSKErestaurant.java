@@ -1,5 +1,11 @@
 package Homework;
 
+/**
+ * User interface for a menu and ordering system,
+ * using console interface.
+ * @author Kunyaruk Katebunlu
+ */
+
 import java.util.Scanner;
 
 public class ImproveSKErestaurant {
