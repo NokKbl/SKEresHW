@@ -1,0 +1,14 @@
+# Menu; price
+
+Pizza; 250.00
+Chickens; 129.00
+Ham Spaghetti; 149.00
+Caesar Salad; 129.00
+Garlic Bread; 79.00
+SKE's Pizzokie; 109.00
+Chocolate Lava Cake; 75.00
+Ice-Cream; 25.00
+Soft Drink; 45.00
+Juice; 45.00
+Italian Soda; 45.00
+Water; 20.00
