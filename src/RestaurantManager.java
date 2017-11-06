@@ -13,13 +13,9 @@ public class RestaurantManager {
 	static Scanner scan = new Scanner(System.in);
 	static ArrayList<String> menuItems = new ArrayList<>();
 	static ArrayList<Double> prices = new ArrayList<>();
-	private static String menuFile = "data/menu.txt";
-	
-	static void setMenu(String filename) {
-		menuFile = filename;
-	}
 	
 	static void init(){
+		String menuFile = "data/menu.txt";
 		ClassLoader loader = RestaurantManager.class.getClassLoader();
 
 		InputStream in = loader.getResourceAsStream(menuFile);
