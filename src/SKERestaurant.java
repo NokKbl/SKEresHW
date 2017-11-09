@@ -1,5 +1,6 @@
 
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,18 +17,28 @@ import java.util.Scanner;
 public class SKERestaurant {
 	static Scanner scan = new Scanner(System.in);
 	static String day ;
-	static double[] quantities;
+	static int[] quantities;
 	static double[] result;
 	static double total;
 	static double subtotal = 0.00;
 	static int orderNumber;
+	static RestaurantManager rm;
+	static private String[] menu;
+	static private double[] price;
+	static protected DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
+	static protected LocalDateTime now = LocalDateTime.now();
+	
+	
+	public SKERestaurant(RestaurantManager rm){
+		this.rm = rm;
+	}
 	
 	/**
 	 * Print list of available menu.
 	 **/
 	public static void printMenuList() {
-		double[] price = RestaurantManager.getPrice();
-		String[] menu = RestaurantManager.getMenuItems();
+		menu = rm.getMenuItems();
+		price = rm.getPrice();
 		
 		System.out.println("\n>> Menu Items List <<");
 		for (int n = 0; n <= menu.length - 1; n++) {
@@ -74,7 +85,7 @@ public class SKERestaurant {
 		System.out.println("\t\t\t  >> Weekend = 5% discount\n");
 		if(day.equals("Fri")) System.out.println(">> Today is " + day + ", you got 10% discount.");
 		else if(day.equals("Sat") || day.equals("Sun")) System.out.println(">> Today is " + day + ", you got 5% discount.");
-		else System.out.println(">> Today is " + day + ", no discount aviable.");
+		else System.out.println(">> Today is " + day + ", no discount available.");
 		return day;
 	}
 
@@ -84,8 +95,8 @@ public class SKERestaurant {
 	 **/
 	public static void getOrder(int orderNumber) {
 		int quantity = 0;
-		double[] price = RestaurantManager.getPrice();
-		quantities = new double[price.length];
+		price = rm.getPrice();
+		quantities = new int[price.length];
 		result = new double[price.length];
 
 		while (true) {
@@ -117,20 +128,15 @@ public class SKERestaurant {
 						if (inChoice.equals("p")) {
 							printOrder();
 							break;
-						}else{
-							break;
-						}
+						} else break;
 					}
 				}
 			}
-			if (inChoice.equals("m")) {
-				printMenuList();
-			}
-			if (inChoice.equals("?")) {
-				printCommands();
-			}
+			if (inChoice.equals("m")) printMenuList();
+			if (inChoice.equals("?")) printCommands();
 			if (inChoice.equals("q")) {
 				printReceipt();
+				System.out.println("\n============= Thank you =============");
 				break;
 			}
 		}
@@ -140,12 +146,12 @@ public class SKERestaurant {
 	 * Print the latest version of customer's order.
 	 */
 	public static void printOrder() {
-		String[] menu = RestaurantManager.getMenuItems();
+		menu = rm.getMenuItems();
 
 		System.out.println("\n+--------------- Menu ---------------+-- Qty --+---- Price ----+");
 		for (int k = 1; k <= result.length; k++) {
 			if (quantities[k - 1] != 0 && quantities[k - 1] > 0) {
-				System.out.printf("| %-35s|%7.0f  |%13.2f  |\n", menu[k - 1], quantities[k - 1], result[k - 1]);
+				System.out.printf("| %-35s|%7d  |%13.2f  |\n", menu[k - 1], quantities[k - 1], result[k - 1]);
 			}
 		}
 		System.out.println("+------------------------------------+---------+---------------+");
@@ -167,44 +173,53 @@ public class SKERestaurant {
 	 */
 	public static void printReceipt() {
 		double vat, discount;
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
-		LocalDateTime now = LocalDateTime.now();
 
 		System.out.println("\nDate & Time : " + dtf.format(now));
 		printOrder();
 
-		for (int c = 0; c < result.length; c++) {
-			subtotal = subtotal + result[c];
-		}
-		if (day.equals("Fri")) {
-			discount = (subtotal * 10) / 100;
-		} else if (day.equals("Sat") || day.equals("Sun")) {
-			discount = (subtotal * 5) / 100;
-		} else {
-			discount = 0.00;
-		}
+		for (int c = 0; c < result.length; c++) subtotal = subtotal + result[c];
+		if (day.equals("Fri")) discount = (subtotal * 10) / 100;
+		else if (day.equals("Sat") || day.equals("Sun")) discount = (subtotal * 5) / 100;
+		else discount = 0.00;
 		vat = vat(subtotal);
 		total = subtotal + vat - discount;
 
 		System.out.printf("|%-46s|%13.2f  |\n", " Subtotal :", subtotal);
 		if (discount != 0) {
-			if (day.equals("Fri")) {
-				System.out.printf("|%-46s|%13.2f  |\n", " Friday discount (10%) :", discount);
-			} else {
-				System.out.printf("|%-46s|%13.2f  |\n", " Weekend discount (5%) :", discount);
-			}
+			if (day.equals("Fri")) System.out.printf("|%-46s|%13.2f  |\n", " Friday discount (10%) :", discount);
+			else System.out.printf("|%-46s|%13.2f  |\n", " Weekend discount (5%) :", discount);
 		}
 		System.out.printf("|%-46s|%13.2f  |\n", " VAT 7% :", vat);
 		System.out.printf("|%-46s|%13.2f  |\n", " Total :", total);
 		System.out.println("+----------------------------------------------+---------------+");
-		System.out.println("\n============= Thank you =============");
+		
+	}
+	
+	public static String getData(){
+		String allOrder = "";
+		for (int k = 1; k <= result.length; k++) {
+			if (quantities[k - 1] != 0 && quantities[k - 1] > 0) {
+				String Orders = menu[k - 1] + ", " + quantities[k - 1] + " @ " + result[k - 1] + "\n";
+				allOrder = allOrder.concat(Orders);
+			}
+		}
+		String finalTotal = "Total : " + total + "\n\n";
+		allOrder = allOrder.concat(finalTotal);
+		return allOrder;
+	}
+	
+	public static void recordReceipt() throws IOException {
+		String receipt = getData();
+		String dateTime = dtf.format(now) + "\n";
+		rm.writeToFile(dateTime, receipt);
 	}
 
-	public static void main(String[] args) {
-		RestaurantManager.init();
+	public static void main(String[] args) throws IOException {
+		rm.init();
 		printCommandsAndMenu();
 		getDay();
 		getOrder(orderNumber);
+		recordReceipt();
 	}
 
 }

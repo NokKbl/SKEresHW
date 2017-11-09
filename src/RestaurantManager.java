@@ -1,11 +1,17 @@
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * System for manager to get the menu list and price list.
+ * System for manager to get the menu list, price list and record order to file.
  * 
  * @author Kunyaruk Katebunlu
  */
@@ -13,9 +19,13 @@ public class RestaurantManager {
 	static Scanner scan = new Scanner(System.in);
 	static ArrayList<String> menuItems = new ArrayList<>();
 	static ArrayList<Double> prices = new ArrayList<>();
+	static final String menuFile = "data/menu.txt";
+	static final String writeOrder = "src/data/writeOrder.txt";
 	
+	/**
+	 * Read the data (menu and price) from file and add those data to list.
+	 */
 	static void init(){
-		String menuFile = "data/menu.txt";
 		ClassLoader loader = RestaurantManager.class.getClassLoader();
 
 		InputStream in = loader.getResourceAsStream(menuFile);
@@ -37,6 +47,26 @@ public class RestaurantManager {
 			prices.add(Double.parseDouble(array[1]));
 		}
 		scanFile.close();
+	}
+	
+	/**
+	 * Write the data (include date, time, menu, quantity, price and total) into a file.
+	 * 
+	 * @param dayTime is date and time when customer get the receipt.
+	 * @param allOrder is all order that customer ordered and total price of the order.
+	 * @throws IOException when file cannot be opened.
+	 */
+	static void writeToFile(String dayTime, String allOrder) throws IOException{
+		  File outp = new File(writeOrder);
+		  FileOutputStream out;
+		  try {
+		      out = new FileOutputStream(outp, true);
+		      out.write(dayTime.getBytes());	
+		      out.write(allOrder.getBytes());
+		  } catch (FileNotFoundException ex) {
+		      System.out.println("Couldn't open output file "+outp);
+		      return;
+		  }
 	}
 	
 	public static String[] getMenuItems() {

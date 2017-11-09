@@ -1,0 +1,22 @@
+# date & time
+# menu, quantity @ price
+# Total
+
+09 Nov 2017, 22:57
+Pizza, 2 @ 500.0
+Chickens, 3 @ 387.0
+Total : 949.09
+
+09 Nov 2017, 23:10
+Chickens, 3 @ 387.0
+Caesar Salad, 2 @ 258.0
+Soft Drink, 1 @ 45.0
+Total : 738.3
+
+09 Nov 2017, 23:50
+Chickens, 2 @ 258.0
+Caesar Salad, 1 @ 129.0
+Chocolate Lava Cake, 2 @ 150.0
+Soft Drink, 1 @ 45.0
+Total : 622.74
+
