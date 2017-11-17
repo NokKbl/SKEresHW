@@ -28,7 +28,6 @@ public class SKERestaurant {
 	static protected DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
 	static protected LocalDateTime now = LocalDateTime.now();
 	
-	
 	public SKERestaurant(RestaurantManager rm){
 		this.rm = rm;
 	}
@@ -38,7 +37,7 @@ public class SKERestaurant {
 	 **/
 	public static void printMenuList() {
 		menu = rm.getMenuItems();
-		price = rm.getPrice();
+		price = rm.getPrices();
 		
 		System.out.println("\n>> Menu Items List <<");
 		for (int n = 0; n <= menu.length - 1; n++) {
@@ -93,9 +92,9 @@ public class SKERestaurant {
 	 * Require input for choice to get quantity/ to print total/ to end the
 	 * program. (It depends on the choice that the customer choose.)
 	 **/
-	public static void getOrder(int orderNumber) {
+	public static void recordOrder(int orderNumber) {
 		int quantity = 0;
-		price = rm.getPrice();
+		price = rm.getPrices();
 		quantities = new int[price.length];
 		result = new double[price.length];
 
@@ -203,12 +202,11 @@ public class SKERestaurant {
 				allOrder = allOrder.concat(Orders);
 			}
 		}
-		String finalTotal = "Total : " + total + "\n\n";
-		allOrder = allOrder.concat(finalTotal);
+		allOrder = allOrder.concat(String.format("Total : %.2f\n\n", total));
 		return allOrder;
 	}
 	
-	public static void recordReceipt() throws IOException {
+	public static void getReceipt() throws IOException {
 		String receipt = getData();
 		String dateTime = dtf.format(now) + "\n";
 		rm.writeToFile(dateTime, receipt);
@@ -218,8 +216,8 @@ public class SKERestaurant {
 		rm.init();
 		printCommandsAndMenu();
 		getDay();
-		getOrder(orderNumber);
-		recordReceipt();
+		recordOrder(orderNumber);
+		getReceipt();
 	}
 
 }

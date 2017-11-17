@@ -57,25 +57,36 @@ public class RestaurantManager {
 	 * @throws IOException when file cannot be opened.
 	 */
 	static void writeToFile(String dayTime, String allOrder) throws IOException{
-		  File outp = new File(writeOrder);
+		  File output = new File(writeOrder);
 		  FileOutputStream out;
 		  try {
-		      out = new FileOutputStream(outp, true);
+		      out = new FileOutputStream(output, true);
 		      out.write(dayTime.getBytes());	
 		      out.write(allOrder.getBytes());
 		  } catch (FileNotFoundException ex) {
-		      System.out.println("Couldn't open output file "+outp);
+		      System.out.println("Couldn't open output file " + output);
 		      return;
 		  }
+		  out.close();
 	}
 	
+	/**
+	 * To change array list of menu items into array
+	 * 
+	 * @return array of menu items
+	 */
 	public static String[] getMenuItems() {
 		ArrayList<String> listMenu = menuItems;
 		String[] items = listMenu.toArray(new String[listMenu.size()]);
 		return items;
 	}
 
-	public static double[] getPrice() {
+	/**
+	 * To change array list of prices into array
+	 * 
+	 * @return array of prices
+	 */
+	public static double[] getPrices() {
 		ArrayList<Double> listPrice = prices;
 		double[] menuPrice = new double[listPrice.size()];
 		for (int i = 0; i < menuPrice.length; i++) {
