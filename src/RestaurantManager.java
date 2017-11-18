@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * System for manager to get the menu list, price list and record order to file.
+ * System for restaurant manager to get the menu items with 
+ * their prices from file and also record customer order to file.
  * 
  * @author Kunyaruk Katebunlu
  */
