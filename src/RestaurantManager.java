@@ -17,16 +17,18 @@ import java.util.Scanner;
  */
 public class RestaurantManager {
 	static Scanner scan = new Scanner(System.in);
-	static ArrayList<String> menuItems = new ArrayList<>();
-	static ArrayList<Double> prices = new ArrayList<>();
+	static private String[] menuItems;
+	static private double[] prices;
 	static final String menuFile = "data/menu.txt";
-	static final String writeOrder = "src/data/writeOrder.txt";
+	static final String writeOrder = "data/writeOrder.txt";
 	
 	/**
 	 * Read the data (menu and price) from file and add those data to list.
 	 */
 	static void init(){
 		ClassLoader loader = RestaurantManager.class.getClassLoader();
+		ArrayList<String> menuItemsList = new ArrayList<>();
+		ArrayList<Double> pricesList = new ArrayList<>();
 
 		InputStream in = loader.getResourceAsStream(menuFile);
 		if (in == null) {
@@ -43,10 +45,18 @@ public class RestaurantManager {
 			}
 
 			String[] array = line.split("; ");
-			menuItems.add(array[0]);
-			prices.add(Double.parseDouble(array[1]));
+			menuItemsList.add(array[0]);
+			pricesList.add(Double.parseDouble(array[1]));
 		}
+		
+		menuItems = new String[menuItemsList.size()];
+		menuItemsList.toArray(menuItems);
+		
+		prices = new double[pricesList.size()];
+		for(int n = 0; n < pricesList.size(); n++) prices[n] = pricesList.get(n);
+		
 		scanFile.close();
+		
 	}
 	
 	/**
@@ -71,28 +81,21 @@ public class RestaurantManager {
 	}
 	
 	/**
-	 * To change array list of menu items into array
+	 * To get and return array of menu items
 	 * 
 	 * @return array of menu items
 	 */
 	public static String[] getMenuItems() {
-		ArrayList<String> listMenu = menuItems;
-		String[] items = listMenu.toArray(new String[listMenu.size()]);
-		return items;
+		return menuItems;
 	}
 
 	/**
-	 * To change array list of prices into array
+	 * To get and return array of menu prices
 	 * 
 	 * @return array of prices
 	 */
 	public static double[] getPrices() {
-		ArrayList<Double> listPrice = prices;
-		double[] menuPrice = new double[listPrice.size()];
-		for (int i = 0; i < menuPrice.length; i++) {
-			menuPrice[i] = listPrice.get(i);
-		}
-		return menuPrice;
+		return prices;
 	}
 
 }
