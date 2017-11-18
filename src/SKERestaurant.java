@@ -10,7 +10,10 @@ import java.util.Locale;
 import java.util.Scanner;
 
 /**
- * User interface for a menu and ordering system, using console interface.
+ * Main class for user interface for a menu and ordering system,
+ * using console interface.This class will display commands, menu items
+ * and prices then let customer input command and orders and print
+ * final order receipt when done.
  * 
  * @author Kunyaruk Katebunlu
  */
